@@ -31,7 +31,7 @@ void setup() {
   pinMode(dataPin, OUTPUT);
   
   pinMode(pwm1, OUTPUT);
-  pinMode(pwm2, OUTPUT);
+  //pinMode(pwm2, OUTPUT);
   
   pinMode(buttonPin, INPUT);
   
@@ -43,7 +43,12 @@ void setup() {
   
   analogReference(EXTERNAL);
   
+
+
   Serial.begin(9600);
+  
+  
+  
 }
 
 const int ledPin = weNor1;       // the pin that the LED is attached to
@@ -54,10 +59,52 @@ int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
 int i = 0;
 
+int instr[4];
+
+int WczytajInstrukcje(){
+  if( Serial.available() > 3){
+    for (int i=0; i<4;i++){
+         instr[i]=Serial.read();
+    }
+  return 0;
+  }
+  else{
+    instr[1] = 0;
+  }
+  return -1;
+}
+
+
 void loop() {
-/*  // count from 0 to 255 and display the number 
+    /*if(Serial.available() > 0){
+       Serial.print(Serial.available());
+       Serial.print(" ");
+       Serial.println(Serial.read(), DEC);    
+    }*/
+    
+   /* WczytajInstrukcje();
+    if (instr[1] != 0){
+    for (int i=0; i<4; i++)
+       Serial.println(instr[i], HEX);
+    Serial.flush() ;
+    }*/
+    
+   
+  
+  
+  
+  
+  
+  // count from 0 to 255 and display the number 
   // on the LEDs
   for (int numberToDisplay = 0; numberToDisplay < 256; numberToDisplay++) {
+    
+    WczytajInstrukcje();
+    if (instr[1] != 0){
+    for (int i=0; i<4; i++)
+       Serial.println(instr[i], HEX);
+    Serial.flush() ;
+    }
     // take the latchPin low so 
     // the LEDs don't change while you're sending in bits:
     digitalWrite(latchPin, LOW);
@@ -66,7 +113,12 @@ void loop() {
     //take the latch pin high so the LEDs will light up:
     digitalWrite(latchPin, HIGH);
     // pause before next value:
+    delay(100);
     
+    
+  }
+  
+/*
   analogRead(analogTemp);
   delay(10);
   readTemp = analogRead(analogTemp) * 3.3;
@@ -97,8 +149,8 @@ void loop() {
   }
   */
   
-      digitalWrite(weNor1, HIGH);
-    digitalWrite(weNor2, LOW);
+     // digitalWrite(weNor1, HIGH);
+   // digitalWrite(weNor2, LOW);
     
     
   	/*if (Serial.available() > 0) {
@@ -146,4 +198,6 @@ void loop() {
    digitalWrite(ledPin, LOW);
   }*/
 }
+
+
 
